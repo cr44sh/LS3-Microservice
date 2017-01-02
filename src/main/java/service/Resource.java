@@ -19,6 +19,10 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Carol Schaefer <carol.schaefer@student.kit.edu>
+ */
+
 @SuppressWarnings("deprecation")
 @Path("/ls3algorithm")
 public class Resource {
