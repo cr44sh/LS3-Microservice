@@ -12,7 +12,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.bson.types.ObjectId;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -71,14 +74,19 @@ public class Resource {
 		 * https://www.mkyong.com/mongodb/java-mongodb-save-image-example/
 		 */
 
+		System.out.println("Request received!");
+		System.out.println(petrinetNames);
+		System.out.println(k);
+		System.out.println(theta);
+		
 		MongoClient mongoClient = new MongoClient("localhost", 27017);
 		DB db = mongoClient.getDB("databasename");
 
 		/*
 		 * GridFS-Objekt erzeugen, um in MongoDB suchen zu können
 		 */
-		GridFS gfsPnml = new GridFS(db, "petrinets");
-		GridFSDBFile pnmlOutput;
+		GridFS gfsPnml = new GridFS(db, "files");
+		GridFSDBFile pnmlOutput;		
 
 		java.nio.file.Path destination;
 		String[] petrinetList = petrinetNames.split(",");
@@ -89,11 +97,13 @@ public class Resource {
 			 * .pnml-Dateien auf der Festplatte abspeichern
 			 */
 			for (int i = 0; i < petrinetList.length; i++) {
-
 				/*
 				 * Petrinetz in MongoDB suchen
 				 */
-				pnmlOutput = gfsPnml.findOne(petrinetList[i]);
+				pnmlOutput = gfsPnml.findOne(new ObjectId(petrinetList[i]));				
+				if (pnmlOutput == null) {
+					throw new FileNotFoundException("File " +  petrinetList[i] +" not found in MongoDB.");
+				}
 
 				/*
 				 * .pnml als Datei abspeichern
@@ -102,7 +112,7 @@ public class Resource {
 				 */
 
 				destination = java.nio.file.Paths.get(
-						"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\microservice\\src\\main\\resources\\petrinetze\\"
+						"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\"
 								+ petrinetList[i] + ".pnml");
 				try {
 					InputStream in = pnmlOutput.getInputStream();
@@ -112,7 +122,7 @@ public class Resource {
 				}
 			}
 		} catch (com.mongodb.MongoException me) {
-			System.err.println("Mongostyle");
+			System.out.println("Mongostyle");
 			me.printStackTrace();
 		}
 
@@ -127,11 +137,17 @@ public class Resource {
 
 		List<Map> result;
 		Ls3Algorithm ls3Algorithm = new Ls3Algorithm();
-
+		
+		print("Before ls3.execute() in Resource.java.");
+		
 		result = ls3Algorithm.execute(new File(
-				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\microservice\\src\\main\\resources\\petrinetze\\")
+				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\")
 						.getAbsolutePath(),
 				k, theta);
+		
+		print("LS3-Result:");
+		print(result.toString());
+		print("####");
 
 		/*********************************************************************************/
 		/*********************************************************************************/
@@ -140,7 +156,7 @@ public class Resource {
 		/*********************************************************************************/
 
 		File petrinetzOrdner = new File(
-				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\microservice\\src\\main\\resources\\petrinetze\\");
+				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\");
 		for (File pnmlDatei : petrinetzOrdner.listFiles()) {
 			if (!pnmlDatei.delete()) {
 				System.err.println(pnmlDatei + " konnte nicht gelöscht werden.");
@@ -153,5 +169,9 @@ public class Resource {
 
 		/*********************************************************************************/
 		/*********************************************************************************/
+	}
+	
+	public static void print(String string) {
+		System.out.println(string);
 	}
 }
