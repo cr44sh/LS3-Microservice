@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +28,6 @@ import java.util.Map;
  * @author Carol Schaefer <carol.schaefer@student.kit.edu>
  */
 
-@SuppressWarnings("deprecation")
 @Path("/ls3algorithm")
 public class Resource {
 
@@ -75,12 +76,13 @@ public class Resource {
 		 */
 
 		System.out.println("Request received!");
-		System.out.println(petrinetNames);
-		System.out.println(k);
-		System.out.println(theta);
+		System.out.println("Petrinetnames: " + petrinetNames);
+		System.out.println("k: " + k);
+		System.out.println("theta: " + theta);
 		
-		MongoClient mongoClient = new MongoClient("localhost", 27017);
-		DB db = mongoClient.getDB("databasename");
+		MongoClient mongoClient = new MongoClient("localhost", 27017);		
+		Datastore datastore = new Morphia().createDatastore(mongoClient, "katharsis");
+		DB db = datastore.getDB();
 
 		/*
 		 * GridFS-Objekt erzeugen, um in MongoDB suchen zu können
