@@ -12,6 +12,7 @@ import de.andreasschoknecht.LS3.*;
  * Provides the LS3 comparison algorithm based on github.com/ASchoknecht/LS3
  *
  * @author Carol Schaefer <carol.schaefer@student.kit.edu>
+ * @date 2017-01-29
  */
 
 public class Ls3Algorithm {
@@ -24,17 +25,17 @@ public class Ls3Algorithm {
 		/*
 		 * QueryAllResult besteht aus einer ArrayList<QueryResult>. Jedes
 		 * QueryResult besteht aus einem LS3Document sowie einer
-		 * ArrayList<LS3Document>, die die LS3Documents ‰hnlicher Netze aus der
-		 * Collection enth‰lt. Ein LS3Document enth‰lt u.a. den Pfad zum
+		 * ArrayList<LS3Document>, die die LS3Documents √§hnlicher Netze aus der
+		 * Collection enth√§lt. Ein LS3Document enth√§lt u.a. den Pfad zum
 		 * betrachteten Petrinetz, aus dem sich der Name des Netzes extrahieren
-		 * l‰sst.
+		 * l√§sst.
 		 */
 
 		ArrayList<QueryResult> resultList = queryAllResult.getResults();
 		LS3Document ls3Document;
-		String fileName = new String("");
-		String fileNameSimilar = new String("");
-		String similarPetrinets = new String("");
+		String fileName = "";
+		String fileNameSimilar = "";
+		String similarPetrinets = "";
 		ArrayList<LS3Document> results;
 		ArrayList<Map> result = new ArrayList<Map>();
 		HashMap<String, String> queryResultMap;
@@ -51,15 +52,15 @@ public class Ls3Algorithm {
 				fileName = extractFileName(ls3Document.getPNMLPath());
 
 				/*
-				 * Erstelle f¸r alle QueryResults in queryAllResult eine Hashmap
+				 * Erstelle f√ºr alle QueryResults in queryAllResult eine Hashmap
 				 * mit dem Namen des aktuellen Petrinetzes sowie den Namen der
-				 * ‰hnlichen Netze
+				 * √§hnlichen Netze
 				 */
 				queryResultMap = new HashMap<String, String>();
 
 				/*
 				 * Die LS3Documents des einzelnen QueryResults (die die
-				 * ‰hnlichen Netze repr‰sentieren) abspeichern
+				 * √§hnlichen Netze repr√§sentieren) abspeichern
 				 */
 				results = resultList.get(i).getResults();
 
@@ -72,9 +73,9 @@ public class Ls3Algorithm {
 				while (o < results.size()) {
 
 					/*
-					 * alle Namen ‰hnlicher Petrinetze in einem String durch ","
+					 * alle Namen √§hnlicher Petrinetze in einem String durch ","
 					 * getrennt aneinanderreihen wenn fileNameSimilar bisher
-					 * leer, dann ohne , anf¸gen
+					 * leer, dann ohne , anf√ºgen
 					 */
 					fileNameSimilar = extractFileName(results.get(o).getPNMLPath());
 					if (similarPetrinets.equals("")) {
