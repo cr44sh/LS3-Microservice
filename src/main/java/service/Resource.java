@@ -26,13 +26,11 @@ import java.util.Map;
 
 /**
  * @author Carol Schaefer <carol.schaefer@student.kit.edu>
+ * @date 2017-01-29
  */
 
 @Path("/ls3algorithm")
 public class Resource {
-
-	// SLF4J is provided with Dropwizard
-	// Logger log = LoggerFactory.getLogger(Resource.class);
 
 	public Resource() {
 		System.out.println("Neue Instanz von Resource: " + this);
@@ -124,7 +122,6 @@ public class Resource {
 				}
 			}
 		} catch (com.mongodb.MongoException me) {
-			System.out.println("Mongostyle");
 			me.printStackTrace();
 		}
 
@@ -140,16 +137,10 @@ public class Resource {
 		List<Map> result;
 		Ls3Algorithm ls3Algorithm = new Ls3Algorithm();
 		
-		print("Before ls3.execute() in Resource.java.");
-		
 		result = ls3Algorithm.execute(new File(
 				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\")
 						.getAbsolutePath(),
 				k, theta);
-		
-		print("LS3-Result:");
-		print(result.toString());
-		print("####");
 
 		/*********************************************************************************/
 		/*********************************************************************************/
@@ -161,7 +152,7 @@ public class Resource {
 				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\");
 		for (File pnmlDatei : petrinetzOrdner.listFiles()) {
 			if (!pnmlDatei.delete()) {
-				System.err.println(pnmlDatei + " konnte nicht gelöscht werden.");
+				System.err.println(pnmlDatei + " could not be deleted on disk.");
 			}
 		}
 
@@ -171,9 +162,5 @@ public class Resource {
 
 		/*********************************************************************************/
 		/*********************************************************************************/
-	}
-	
-	public static void print(String string) {
-		System.out.println(string);
 	}
 }

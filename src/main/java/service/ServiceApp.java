@@ -11,7 +11,7 @@ public class ServiceApp extends Application<ServiceConfiguration> {
 		if (args.length == 0) {
 			args = new String[2];
 			args[0] = "server";
-			args[1] = "C:\\Users\\Carol\\Eclipse_Workspace\\git\\MicroService\\microservice\\microservice.yml";
+			args[1] = "C:\\Users\\Carol\\Eclipse_Workspace\\git\\MicroService\\LS3-Microservice\\microservice.yml";
 		}
 
 		new ServiceApp().run(args);
