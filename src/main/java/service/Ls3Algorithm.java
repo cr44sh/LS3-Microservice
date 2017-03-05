@@ -12,7 +12,6 @@ import de.andreasschoknecht.LS3.*;
  * Provides the LS3 comparison algorithm based on github.com/ASchoknecht/LS3
  *
  * @author Carol Schaefer <carol.schaefer@student.kit.edu>
- * @date 2017-01-29
  */
 
 public class Ls3Algorithm {
@@ -20,24 +19,26 @@ public class Ls3Algorithm {
 	public ArrayList<Map> execute(String pnmlPath, int k, float theta) {
 
 		LS3 ls3 = new LS3();
-		QueryAllResult queryAllResult = ls3.queryKAll(pnmlPath, k, theta);
+		QueryAllResult queryAllResult = ls3.queryKAllPrintData(pnmlPath, k, theta);
 
 		/*
 		 * QueryAllResult besteht aus einer ArrayList<QueryResult>. Jedes
 		 * QueryResult besteht aus einem LS3Document sowie einer
-		 * ArrayList<LS3Document>, die die LS3Documents ähnlicher Netze aus der
-		 * Collection enthält. Ein LS3Document enthält u.a. den Pfad zum
+		 * ArrayList<LS3Document>, die die LS3Documents �hnlicher Netze aus der
+		 * Collection enth�lt. Ein LS3Document enth�lt u.a. den Pfad zum
 		 * betrachteten Petrinetz, aus dem sich der Name des Netzes extrahieren
-		 * lässt.
+		 * l�sst.
 		 */
 
 		ArrayList<QueryResult> resultList = queryAllResult.getResults();
 		LS3Document ls3Document;
-		String fileName = "";
-		String fileNameSimilar = "";
-		String similarPetrinets = "";
+		String fileName = new String("");
+		String fileNameSimilar = new String("");
+		String similarPetrinets = new String("");
+		Double similarParam = new Double(0);
 		ArrayList<LS3Document> results;
 		ArrayList<Map> result = new ArrayList<Map>();
+		ArrayList<Double> simresult;
 		HashMap<String, String> queryResultMap;
 
 		try {
@@ -52,18 +53,18 @@ public class Ls3Algorithm {
 				fileName = extractFileName(ls3Document.getPNMLPath());
 
 				/*
-				 * Erstelle für alle QueryResults in queryAllResult eine Hashmap
+				 * Erstelle f�r alle QueryResults in queryAllResult eine Hashmap
 				 * mit dem Namen des aktuellen Petrinetzes sowie den Namen der
-				 * ähnlichen Netze
+				 * �hnlichen Netze
 				 */
 				queryResultMap = new HashMap<String, String>();
 
 				/*
 				 * Die LS3Documents des einzelnen QueryResults (die die
-				 * ähnlichen Netze repräsentieren) abspeichern
+				 * �hnlichen Netze repr�sentieren) abspeichern
 				 */
 				results = resultList.get(i).getResults();
-
+				simresult = resultList.get(i).getSimilarityValues();
 				/*
 				 * Die LS3Documents durchgehen und Namen des jew. Netzes
 				 * abspeichern
@@ -73,15 +74,16 @@ public class Ls3Algorithm {
 				while (o < results.size()) {
 
 					/*
-					 * alle Namen ähnlicher Petrinetze in einem String durch ","
+					 * alle Namen �hnlicher Petrinetze in einem String durch ","
 					 * getrennt aneinanderreihen wenn fileNameSimilar bisher
-					 * leer, dann ohne , anfügen
+					 * leer, dann ohne , anf�gen
 					 */
 					fileNameSimilar = extractFileName(results.get(o).getPNMLPath());
+					similarParam = simresult.get(o);
 					if (similarPetrinets.equals("")) {
-						similarPetrinets = fileNameSimilar;
+						similarPetrinets = fileNameSimilar +" ("+similarParam+ ")";
 					} else {
-						similarPetrinets = similarPetrinets + "," + fileNameSimilar;
+						similarPetrinets = similarPetrinets + "," + fileNameSimilar +" ("+similarParam+ ")";
 					}
 
 					o++;

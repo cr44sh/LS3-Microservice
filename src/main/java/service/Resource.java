@@ -83,10 +83,13 @@ public class Resource {
 		DB db = datastore.getDB();
 
 		/*
-		 * GridFS-Objekt erzeugen, um in MongoDB suchen zu können
+		 * GridFS-Objekt erzeugen, um in MongoDB suchen zu kï¿½nnen
 		 */
 		GridFS gfsPnml = new GridFS(db, "files");
-		GridFSDBFile pnmlOutput;		
+		GridFSDBFile pnmlOutput;
+
+		//current project location
+		String pfad = System.getProperty("user.dir");
 
 		java.nio.file.Path destination;
 		String[] petrinetList = petrinetNames.split(",");
@@ -100,7 +103,7 @@ public class Resource {
 				/*
 				 * Petrinetz in MongoDB suchen
 				 */
-				pnmlOutput = gfsPnml.findOne(new ObjectId(petrinetList[i]));				
+				pnmlOutput = gfsPnml.findOne(new ObjectId(petrinetList[i]));
 				if (pnmlOutput == null) {
 					throw new FileNotFoundException("File " +  petrinetList[i] +" not found in MongoDB.");
 				}
@@ -112,7 +115,7 @@ public class Resource {
 				 */
 
 				destination = java.nio.file.Paths.get(
-						"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\"
+						pfad + "\\src\\main\\resources\\petrinetze"
 								+ petrinetList[i] + ".pnml");
 				try {
 					InputStream in = pnmlOutput.getInputStream();
@@ -138,18 +141,18 @@ public class Resource {
 		Ls3Algorithm ls3Algorithm = new Ls3Algorithm();
 		
 		result = ls3Algorithm.execute(new File(
-				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\")
+						pfad + "\\src\\main\\resources\\petrinetze")
 						.getAbsolutePath(),
 				k, theta);
 
 		/*********************************************************************************/
 		/*********************************************************************************/
-		// Schritt 3: .pnml-Dateien auf Festplatte wieder löschen und Ergebnis
+		// Schritt 3: .pnml-Dateien auf Festplatte wieder lï¿½schen und Ergebnis
 		// ausgeben
 		/*********************************************************************************/
 
 		File petrinetzOrdner = new File(
-				"C:\\Users\\Carol\\ECLIPSE_WORKSPACE\\git\\MicroService\\LS3-Microservice\\src\\main\\resources\\petrinetze\\");
+				pfad + "\\src\\main\\resources\\petrinetze");
 		for (File pnmlDatei : petrinetzOrdner.listFiles()) {
 			if (!pnmlDatei.delete()) {
 				System.err.println(pnmlDatei + " could not be deleted on disk.");
