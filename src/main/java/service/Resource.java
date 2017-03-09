@@ -115,7 +115,7 @@ public class Resource {
 				 */
 
 				destination = java.nio.file.Paths.get(
-						pfad + "\\src\\main\\resources\\petrinetze"
+						pfad + "\\src\\main\\resources\\petrinetze\\"
 								+ petrinetList[i] + ".pnml");
 				try {
 					InputStream in = pnmlOutput.getInputStream();

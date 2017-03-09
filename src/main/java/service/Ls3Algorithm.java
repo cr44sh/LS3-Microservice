@@ -12,6 +12,7 @@ import de.andreasschoknecht.LS3.*;
  * Provides the LS3 comparison algorithm based on github.com/ASchoknecht/LS3
  *
  * @author Carol Schaefer <carol.schaefer@student.kit.edu>
+ *
  */
 
 public class Ls3Algorithm {
@@ -32,10 +33,12 @@ public class Ls3Algorithm {
 
 		ArrayList<QueryResult> resultList = queryAllResult.getResults();
 		LS3Document ls3Document;
-		String fileName = new String("");
-		String fileNameSimilar = new String("");
-		String similarPetrinets = new String("");
-		Double similarParam = new Double(0);
+		String fileName;
+		String fileNameSimilar;
+		Double paramSimilar;
+		String similarPetrinets;
+		String similarParams;
+
 		ArrayList<LS3Document> results;
 		ArrayList<Map> result = new ArrayList<Map>();
 		ArrayList<Double> simresult;
@@ -71,6 +74,7 @@ public class Ls3Algorithm {
 				 */
 				int o = 0;
 				similarPetrinets = "";
+				similarParams = "";
 				while (o < results.size()) {
 
 					/*
@@ -79,17 +83,21 @@ public class Ls3Algorithm {
 					 * leer, dann ohne , anf�gen
 					 */
 					fileNameSimilar = extractFileName(results.get(o).getPNMLPath());
-					similarParam = simresult.get(o);
+					paramSimilar = simresult.get(o);
+
 					if (similarPetrinets.equals("")) {
-						similarPetrinets = fileNameSimilar +" ("+similarParam+ ")";
+						similarPetrinets = fileNameSimilar;
+						similarParams = "(" + paramSimilar.toString() + ")";
 					} else {
-						similarPetrinets = similarPetrinets + "," + fileNameSimilar +" ("+similarParam+ ")";
+						similarPetrinets = similarPetrinets + "," + fileNameSimilar;
+						similarParams = similarParams + ",(" + paramSimilar.toString() + ")";
 					}
 
 					o++;
 				}
 				queryResultMap.put("name", fileName);
 				queryResultMap.put("similar petrinets", similarPetrinets);
+				queryResultMap.put("similar param", similarParams);
 				result.add(queryResultMap);
 				i++;
 			}
