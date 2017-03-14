@@ -12,6 +12,7 @@ import de.andreasschoknecht.LS3.*;
  * Provides the LS3 comparison algorithm based on github.com/ASchoknecht/LS3
  *
  * @author Carol Schaefer <carol.schaefer@student.kit.edu>
+ * @author Caroline Dieterich <caroline.dieterich@student.kit.edu>
  *
  */
 
